@@ -1,0 +1,28 @@
+{
+  "name": "react-radiodns-epg",
+  "version": "1.0.0",
+  "description": "RadioDNS EPG UI interface written in React JS",
+  "main": "index.js",
+  "scripts": {
+    "build-jsx": "webpack",
+    "test": "test"
+  },
+  "keywords": [
+    "RadioDNS",
+    "React",
+    "EPG"
+  ],
+  "author": "Pete Redhead",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "moment": "^2.18.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "webpack": "^2.6.1",
+    "moment": "^2.18.1"
+  }
+}
