@@ -3,9 +3,6 @@ import Link from "./link.js"
 import Bearer from "./bearer.js"
 import Multimedia from "./multimedia.js"
 
-const EPGNamespaceURI = "http://www.worlddab.org/schemas/epgDataTypes/14"
-
-
 export default class Service {
     constructor() {
         this.bearers = []
@@ -15,8 +12,6 @@ export default class Service {
         this.shortName, this.mediumName, this.longName = undefined
         this.multimedia = {}
         this.shortDescription, this.longDescription = undefined
-        
-        
     }
     
     fromXml(xml) {
@@ -31,18 +26,19 @@ export default class Service {
         // Genres
         
         // Keywords
-        
+        //let keywords = xml.getE
         // Links
         
+        
         // Short Name
-        let shortName = xml.getElementsByTagNameNS(EPGNamespaceURI, "shortName")
+        let shortName = xml.getElementsByTagName("shortName")
         if (shortName.length > 0) {
             if (shortName[0].childNodes !== undefined && shortName[0].childNodes.length > 0) {
                 this.shortName = shortName[0].childNodes[0].textContent
             }
         }
         // Medium Name
-        let mediumName = xml.getElementsByTagNameNS(EPGNamespaceURI, "mediumName")
+        let mediumName = xml.getElementsByTagName("mediumName")
         if (mediumName.length > 0) {
             if (mediumName[0].childNodes !== undefined && mediumName[0].childNodes.length > 0) {
                 this.mediumName = mediumName[0].childNodes[0].textContent
@@ -50,7 +46,7 @@ export default class Service {
         }
         
         // Long Name
-        let longName = xml.getElementsByTagNameNS(EPGNamespaceURI, "longName")
+        let longName = xml.getElementsByTagName("longName")
         if (longName.length > 0) {
             if (longName[0].childNodes !== undefined && longName[0].childNodes.length > 0) {
                 this.longName = longName[0].childNodes[0].textContent
@@ -60,7 +56,7 @@ export default class Service {
         // Multimedia
         
         // Short Description
-        let shortDescription = xml.getElementsByTagNameNS(EPGNamespaceURI, "shortDescription")
+        let shortDescription = xml.getElementsByTagName("shortDescription")
         if (shortDescription.length > 0) {
             if (shortDescription[0].childNodes !== undefined && shortDescription[0].childNodes.length > 0) {
                 let text = shortDescription[0].childNodes[0].textContent
@@ -74,7 +70,7 @@ export default class Service {
         }
         
         // Long Description
-        let longDescription = xml.getElementsByTagNameNS(EPGNamespaceURI, "longDescription")
+        let longDescription = xml.getElementsByTagName("longDescription")
         if (longDescription.length > 0) {
             if (longDescription[0].childNodes !== undefined && longDescription[0].childNodes.length > 0) {
                 let text = longDescription[0].childNodes[0].textContent
