@@ -154,10 +154,10 @@ ETSI
 • keywords
 • link
 • bearer
-
 • radiodns
-• geolocation
 • serviceGroupMember
+
+• geolocation
 
 At least one of each of the following descriptive elements shall be specified for each service, in the default document
 language:
