@@ -1,4 +1,4 @@
-import {Genre, GENRE_TYPE} from "./genre.js"
+import Genre from "./genre.js"
 import Link from "./link.js"
 import Bearer from "./bearer.js"
 import Multimedia from "./multimedia.js"
@@ -10,7 +10,7 @@ export default class Service {
         this.keywords = []
         this.links = []
         this.shortName, this.mediumName, this.longName = undefined
-        this.multimedia = {}
+        this.multimedia = [] // may want to key this
         this.shortDescription, this.longDescription = undefined
     }
     
@@ -27,15 +27,7 @@ export default class Service {
         let genres = xml.getElementsByTagName("genre")
         for (var i = 0; i < genres.length; i++) {
             const g = genres[i]
-            let type_ = GENRE_TYPE.MAIN
-            if (g.getAttribute("type") !== null) {
-                if (g.getAttribute("type") == "secondary") {
-                    type_ = GENRE_TYPE.SECONDARY
-                } else if (g.getAttribute("type") == "other") {
-                    type_ = GENRE_TYPE.OTHER
-                }
-            }
-            let genre = new Genre(g.getAttribute("href"), type_, g.textContent)
+            let genre = new Genre(g.getAttribute("href"), g.getAttribute("type"), g.textContent)
             this.genres.push(genre)
         }
         
@@ -77,6 +69,13 @@ export default class Service {
         }
         
         // Multimedia
+        let multimediaz = xml.getElementsByTagName("multimedia")
+        for (var i = 0; i < multimediaz.length; i++) {
+            const m = multimediaz[i]
+            let multimedia = new Multimedia(m.getAttribute("url"), m.getAttribute("lang"), m.getAttribute("mimeValue"), m.getAttribute("type"), parseInt(m.getAttribute("width")), parseInt(m.getAttribute("height")))
+            this.multimedia.push(multimedia)
+        }
+        
         
         
         // Short Description

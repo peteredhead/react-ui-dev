@@ -4,10 +4,16 @@ export const GENRE_TYPE = {
     OTHER: 2
 }
 
-export class Genre {
-    constructor(href, type_ = GENRE_TYPE.MAIN, text=null) {
+export default class Genre {
+    constructor(href, typeString = null, text=null) {
         this.href = href
-        this.type_ = type_
+        if (typeString == "secondary") {
+            this.type_ = GENRE_TYPE.SECONDARY
+        } else if (typeString == "other") {
+            this.type_ = GENRE_TYPE.OTHER
+        } else {
+            this.type_ = GENRE_TYPE.MAIN
+        }
         this.text = text
     }
 }

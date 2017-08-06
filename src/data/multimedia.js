@@ -5,7 +5,7 @@ export const LOGO = {
 }
 
 export default class Multimedia {
-    constructor(lang = undefined, url, mimeValue = undefined, typeString = undefined, width = undefined, height = undefined) {
+    constructor(url, lang = undefined, mimeValue = undefined, typeString = undefined, width = undefined, height = undefined) {
         this.lang =lang
         this.url = url
         switch(typeString) {
