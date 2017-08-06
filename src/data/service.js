@@ -2,6 +2,7 @@ import Genre from "./genre.js"
 import Link from "./link.js"
 import Bearer from "./bearer.js"
 import Multimedia from "./multimedia.js"
+import RadioDNS from "./radiodns.js"
 
 export default class Service {
     constructor() {
@@ -12,6 +13,7 @@ export default class Service {
         this.shortName, this.mediumName, this.longName = undefined
         this.multimedia = [] // may want to key this
         this.shortDescription, this.longDescription = undefined
+        this.radioDNS = undefined
     }
     
     fromXml(xml) {
@@ -105,6 +107,13 @@ export default class Service {
                 }
             }
         }
+        
+        // RadioDNS
+        let radioDNS = xml.getElementsByTagName("radiodns")
+        if (radioDNS.length > 0) {
+            this.radioDNS = RadioDNS(radioDNS.getAttribute("fqdn"), radioDNS.getAttribute("serviceIdentifier"))
+        }
+        
     }
     
     name() {
@@ -138,9 +147,11 @@ ETSI
 • keywords
 • link
 • bearer
+
 • radiodns
 • geolocation
 • serviceGroupMember
+
 At least one of each of the following descriptive elements shall be specified for each service, in the default document
 language:
 • shortName
