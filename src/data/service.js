@@ -14,6 +14,7 @@ export default class Service {
         this.multimedia = [] // may want to key this
         this.shortDescription, this.longDescription = undefined
         this.radioDNS = undefined
+        this.serviceGroupMember = undefined
     }
     
     fromXml(xml) {
@@ -111,7 +112,13 @@ export default class Service {
         // RadioDNS
         let radioDNS = xml.getElementsByTagName("radiodns")
         if (radioDNS.length > 0) {
-            this.radioDNS = RadioDNS(radioDNS.getAttribute("fqdn"), radioDNS.getAttribute("serviceIdentifier"))
+            this.radioDNS = new RadioDNS(radioDNS[0].getAttribute("fqdn"), radioDNS[0].getAttribute("serviceIdentifier"))
+        }
+        
+        // Service Group Member
+        let serviceGroupMember = xml.getElementsByTagName("serviceGroupMember")
+        if (serviceGroupMember.length > 0) {
+            this.serviceGroupMember = serviceGroupMember[0].getAttribute("id")
         }
         
     }
