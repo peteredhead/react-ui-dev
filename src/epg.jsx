@@ -5,7 +5,7 @@ import XSILoader from './services/xsi.js';
 
 class EPGUI extends React.Component {
     render() {
-        XSILoader.loadXSI('http://epg.musicradio.com/radiodns/epg/XSI.xml').then((services, groups) =>
+        XSILoader.loadXSI('http://epg.musicradio.com/radiodns/spi/3.1/SI.xml').then((services, groups) =>
         {
            console.log("Resolved")  
         }, 

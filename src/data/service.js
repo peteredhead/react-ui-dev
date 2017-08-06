@@ -1,4 +1,4 @@
-import Genre from "./genre.js"
+import {Genre, GENRE_TYPE} from "./genre.js"
 import Link from "./link.js"
 import Bearer from "./bearer.js"
 import Multimedia from "./multimedia.js"
@@ -16,19 +16,42 @@ export default class Service {
     
     fromXml(xml) {
         // Bearers
-        let ids = xml.getElementsByTagName("serviceID")
-        for (var i = 0; i < ids.length; i++) { 
-            const service = ids[i]
-            let bearer = new Bearer(service.id, service.cost, service.mimeValue, service.bitrate, service.offset)
+        let bearers = xml.getElementsByTagName("bearer")
+        for (var i = 0; i < bearers.length; i++) { 
+            const b = bearers[i]
+            let bearer = new Bearer(b.id, b.cost, b.mimeValue, b.bitrate, b.offset)
             this.bearers.push(bearer)
         }
         
         // Genres
+        let genres = xml.getElementsByTagName("genre")
+        for (var i = 0; i < genres.length; i++) {
+            const g = genres[i]
+            let type_ = GENRE_TYPE.MAIN
+            if (g.getAttribute("type") !== null) {
+                if (g.getAttribute("type") == "secondary") {
+                    type_ = GENRE_TYPE.SECONDARY
+                } else if (g.getAttribute("type") == "other") {
+                    type_ = GENRE_TYPE.OTHER
+                }
+            }
+            let genre = new Genre(g.getAttribute("href"), type_, g.textContent)
+            this.genres.push(genre)
+        }
         
         // Keywords
-        //let keywords = xml.getE
-        // Links
+        let keywords = xml.getElementsByTagName("keywords")
+        if (keywords.length > 0) {
+            this.keywords = keywords[0].childNodes[0].textContent.split(" ")
+        }
         
+        // Links
+        let links = xml.getElementsByTagName("link")
+        for (var i = 0; i < links.length; i++) {
+            const l = links[i]
+            let link = new Link(l.getAttribute("uri"), l.getAttribute("mimeValue"), l.getAttribute("lang"), l.getAttribute("description"), l.getAttribute("expiryTime"))
+            this.links.push(link)
+        }
         
         // Short Name
         let shortName = xml.getElementsByTagName("shortName")
@@ -54,6 +77,7 @@ export default class Service {
         }
         
         // Multimedia
+        
         
         // Short Description
         let shortDescription = xml.getElementsByTagName("shortDescription")
