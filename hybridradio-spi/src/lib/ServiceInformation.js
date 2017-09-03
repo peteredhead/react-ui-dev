@@ -1,6 +1,6 @@
-import Service from "./service.js"
+import Service from "./Service"
 
-export default class SI {
+export default class ServiceInformation {
     constructor(url) {
         this.url = url
         this.originiator = undefined

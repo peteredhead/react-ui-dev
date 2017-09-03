@@ -1,8 +1,8 @@
-import Genre from "./genre.js"
-import Link from "./link.js"
-import Bearer from "./bearer.js"
-import Multimedia from "./multimedia.js"
-import RadioDNS from "./radiodns.js"
+import Genre from "./Genre"
+import Link from "./Link"
+import Bearer from "./Bearer"
+import Multimedia from "./Multimedia"
+import RadioDNS from "./RadioDNS"
 
 export default class Service {
     constructor() {
