@@ -22,7 +22,19 @@ export default class Service {
         let bearers = xml.getElementsByTagName("bearer")
         for (var i = 0; i < bearers.length; i++) { 
             const b = bearers[i]
-            let bearer = new Bearer(b.id, b.cost, b.mimeValue, b.bitrate, b.offset)
+            let cost = parseInt(b.getAttribute("cost"), 10)
+            if (isNaN(cost)) { cost = undefined }
+            let bitrate = parseInt(b.getAttribute("bitrate"), 10)
+            if (isNaN(bitrate)) { bitrate = undefined }
+            let offset = parseInt(b.getAttribute("offset"), 10)
+            if (isNaN(offset)) { offset = undefined }
+            let bearer = new Bearer(
+                b.hasAttribute("id") ? b.getAttribute("id") : undefined, 
+                cost, 
+                b.hasAttribute("mimeValue") ? b.getAttribute("mimeValue") : undefined, 
+                bitrate, 
+                offset
+            )
             this.bearers.push(bearer)
         }
         
@@ -30,22 +42,34 @@ export default class Service {
         let genres = xml.getElementsByTagName("genre")
         for (var i = 0; i < genres.length; i++) {
             const g = genres[i]
-            let genre = new Genre(g.getAttribute("href"), g.getAttribute("type"), g.textContent)
+            let genre = new Genre(
+                g.hasAttribute("href") ? g.getAttribute("href") : undefined, 
+                g.hasAttribute("href") ? g.getAttribute("type") : undefined, 
+                g.textContent
+            )
             this.genres.push(genre)
         }
         
         // Keywords
         let keywords = xml.getElementsByTagName("keywords")
         if (keywords.length > 0) {
-            this.keywords = keywords[0].childNodes[0].textContent.split(" ")
+            keywords = keywords[0].childNodes[0].textContent.split(",")
+            // Remove spaces from keywords
+            this.keywords = keywords.map((keyword) => { return keyword.trim()})
         }
         
         // Links
         let links = xml.getElementsByTagName("link")
         for (var i = 0; i < links.length; i++) {
             const l = links[i]
-            let link = new Link(l.getAttribute("uri"), l.getAttribute("mimeValue"), l.getAttribute("lang"), l.getAttribute("description"), l.getAttribute("expiryTime"))
-            this.links.push(link)
+            let link = new Link(
+                l.hasAttribute("uri") ? l.getAttribute("uri") : undefined, 
+                l.hasAttribute("mimeValue") ? l.getAttribute("mimeValue") : undefined, 
+                l.hasAttribute("lang") ? l.getAttribute("lang") : undefined, 
+                l.hasAttribute("description") ? l.getAttribute("description") : undefined,
+                l.hasAttribute("expiryTime") ? l.getAttribute("expiryTime") : undefined
+            )
+            if (!link.expired) this.links.push(link)
         }
         
         // Short Name
@@ -75,10 +99,20 @@ export default class Service {
         let multimediaz = xml.getElementsByTagName("multimedia")
         for (var i = 0; i < multimediaz.length; i++) {
             const m = multimediaz[i]
-            let multimedia = new Multimedia(m.getAttribute("url"), m.getAttribute("lang"), m.getAttribute("mimeValue"), m.getAttribute("type"), parseInt(m.getAttribute("width")), parseInt(m.getAttribute("height")))
+            let width = parseInt(m.getAttribute("width"), 10)
+            if (isNaN(width)) { width = undefined }
+            let height = parseInt(m.getAttribute("height"), 10)
+            if (isNaN(height)) { height = undefined }
+            let multimedia = new Multimedia(
+                m.hasAttribute("url") ? m.getAttribute("url") : undefined,
+                m.hasAttribute("lang") ? m.getAttribute("lang") : undefined,
+                m.hasAttribute("mimeValue") ? m.getAttribute("mimeValue") : undefined,
+                m.hasAttribute("type") ? m.getAttribute("type") : undefined, 
+                width, 
+                height
+            )
             this.multimedia.push(multimedia)
         }
-        
         
         
         // Short Description
@@ -112,15 +146,18 @@ export default class Service {
         // RadioDNS
         let radioDNS = xml.getElementsByTagName("radiodns")
         if (radioDNS.length > 0) {
-            this.radioDNS = new RadioDNS(radioDNS[0].getAttribute("fqdn"), radioDNS[0].getAttribute("serviceIdentifier"))
+            let r = radioDNS[0]
+            this.radioDNS = new RadioDNS(
+                r.hasAttribute("fqdn") ? r.getAttribute("fqdn") : undefined, 
+                r.hasAttribute("serviceIdentifier") ? r.getAttribute("serviceIdentifier") : undefined
+            )
         }
         
         // Service Group Member
         let serviceGroupMember = xml.getElementsByTagName("serviceGroupMember")
         if (serviceGroupMember.length > 0) {
-            this.serviceGroupMember = serviceGroupMember[0].getAttribute("id")
+            this.serviceGroupMember = serviceGroupMember[0].hasAttribute("id") ? serviceGroupMember[0].getAttribute("id") : null
         }
-        
     }
     
     name() {

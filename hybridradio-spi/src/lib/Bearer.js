@@ -4,6 +4,7 @@ export default class Bearer {
         if (Number.isInteger(cost) && cost >= 0) {
             this.cost = cost
         } else {
+            console.log(`isInt ${Number.isInteger(cost)}, >=0 ${cost >= 0}`)
             console.warn(`Invalid cost of ${cost} in service ${id}`)
             this.cost = undefined
         }

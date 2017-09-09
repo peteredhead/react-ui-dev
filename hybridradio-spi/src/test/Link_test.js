@@ -51,22 +51,43 @@ describe("Link element", () => {
         let link = new Link(
             "http://example.net/",
             null,
+            "en",
             "Link to website" 
         )
-        link.lang.should.equal("Link to website")
+        link.description.should.equal("Link to website")
     })
     it ("returns a null description if none is set", () =>{
         let link = new Link("http://example.net/");
         (link.description === null).should.be.true
     })
-    it ("returns a link is no expiry time is set", () => {
-    
+    it ("sets expired to false if no expiry time is set", () => {
+        let link = new Link(
+            "http://example.net/",
+            null,
+            null,
+            null
+        )
+        link.expired.should.be.false
     })
-    it ("returns a link if a future expiry time is set", () => {
-        
+    it ("sets expired to false if a future expiry time is set", () => {
+         let link = new Link(
+            "http://example.net/",
+            null,
+            null,
+            null,
+            "2010-04-25T08:00:00Z"
+        )
+        link.expired.should.be.true
     })
-    it ("returns null if a historical expiry time is set", () => {
-        
+    it ("sets expired to true if a historical expiry time is set", () => {
+        let link = new Link(
+            "http://example.net/",
+            null,
+            null,
+            null,
+            "2099-12-25T08:00:00Z"
+        )
+        link.expired.should.be.false
     })
     
 })

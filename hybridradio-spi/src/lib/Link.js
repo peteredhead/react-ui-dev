@@ -6,15 +6,13 @@ export default class Link {
         this.mimeValue = mimeValue
         this.lang = lang
         this.description = description
-        if (expiryTime === null) {
-            this.expiryTime = null
+        this.expiryTime = expiryTime === null ? null : moment(expiryTime)
+        if (this.expiryTime === null) {
+            this.expired = false
         } else {
-            this.expiryTime = moment(expiryTime)
+            const now = moment()
+            this.expired = now > this.expiryTime
         }
     }
     
-    get() {
-        // Check if link expired. If so, return null
-        // else return achor tag with description
-    }
 }
