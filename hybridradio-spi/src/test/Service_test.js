@@ -99,7 +99,16 @@ describe("Service element parser", () => {
         })
     }),
     describe("multimedia", () => {
-        
+        it('has the correct number of items', () => {
+            service.multimedia.length.should.equal(6)
+        }),
+        it('passes each multimedia element correctly', () => {
+            const multimedia = service.multimedia[2]
+            multimedia.mimeValue.should.equal("image/png")
+            multimedia.url.should.equal("http://via.placeholder.com/128x128.png")
+            multimedia.width.should.equal(128)
+            multimedia.height.should.equal(128)
+        })
     }),
     describe("long description", () => {
         it("parses the long description correctly", () => {

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "test": "mocha --compilers js:babel-core/register src/test/",
-    "watch": "mocha --watch --compilers js:babel-core/register src/test/"
+    "watch": "mocha --watch --compilers js:babel-core/register src/test/",
+    "coverage": "nyc --reporter=text mocha --compilers js:babel-core/register src/test/"
   },
   "keywords": [
     "hybridradio",
@@ -31,6 +32,7 @@
     "babel-register": "^6.24.1",
     "chai": "^4.1.1",
     "mocha": "^3.5.0",
+    "nyc": "^11.2.1",
     "webpack": "^2.6.1",
     "xmldom": "^0.1.27"
   },
