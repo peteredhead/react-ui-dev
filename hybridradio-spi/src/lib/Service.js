@@ -16,11 +16,17 @@ export default class Service {
         this.radioDNS = undefined
         this.serviceGroupMember = undefined
     }
-    
+
     fromXml(xml) {
+
+        // Change this approach
+        // Rather than searching for elements matching tag names
+        // iterate over the elements and switch/ case based on
+        // the tag name of the child element
+        // SEE ServiceProvider for details
         // Bearers
         let bearers = xml.getElementsByTagName("bearer")
-        for (var i = 0; i < bearers.length; i++) { 
+        for (var i = 0; i < bearers.length; i++) {
             const b = bearers[i]
             let cost = parseInt(b.getAttribute("cost"), 10)
             if (isNaN(cost)) { cost = undefined }
@@ -29,27 +35,27 @@ export default class Service {
             let offset = parseInt(b.getAttribute("offset"), 10)
             if (isNaN(offset)) { offset = undefined }
             let bearer = new Bearer(
-                b.hasAttribute("id") ? b.getAttribute("id") : undefined, 
-                cost, 
-                b.hasAttribute("mimeValue") ? b.getAttribute("mimeValue") : undefined, 
-                bitrate, 
+                b.hasAttribute("id") ? b.getAttribute("id") : undefined,
+                cost,
+                b.hasAttribute("mimeValue") ? b.getAttribute("mimeValue") : undefined,
+                bitrate,
                 offset
             )
             this.bearers.push(bearer)
         }
-        
+
         // Genres
         let genres = xml.getElementsByTagName("genre")
         for (var i = 0; i < genres.length; i++) {
             const g = genres[i]
             let genre = new Genre(
-                g.hasAttribute("href") ? g.getAttribute("href") : undefined, 
-                g.hasAttribute("href") ? g.getAttribute("type") : undefined, 
+                g.hasAttribute("href") ? g.getAttribute("href") : undefined,
+                g.hasAttribute("href") ? g.getAttribute("type") : undefined,
                 g.textContent
             )
             this.genres.push(genre)
         }
-        
+
         // Keywords
         let keywords = xml.getElementsByTagName("keywords")
         if (keywords.length > 0) {
@@ -57,21 +63,21 @@ export default class Service {
             // Remove spaces from keywords
             this.keywords = keywords.map((keyword) => { return keyword.trim()})
         }
-        
+
         // Links
         let links = xml.getElementsByTagName("link")
         for (var i = 0; i < links.length; i++) {
             const l = links[i]
             let link = new Link(
-                l.hasAttribute("uri") ? l.getAttribute("uri") : undefined, 
-                l.hasAttribute("mimeValue") ? l.getAttribute("mimeValue") : undefined, 
-                l.hasAttribute("lang") ? l.getAttribute("lang") : undefined, 
+                l.hasAttribute("uri") ? l.getAttribute("uri") : undefined,
+                l.hasAttribute("mimeValue") ? l.getAttribute("mimeValue") : undefined,
+                l.hasAttribute("lang") ? l.getAttribute("lang") : undefined,
                 l.hasAttribute("description") ? l.getAttribute("description") : undefined,
                 l.hasAttribute("expiryTime") ? l.getAttribute("expiryTime") : undefined
             )
             if (!link.expired) this.links.push(link)
         }
-        
+
         // Short Name
         let shortName = xml.getElementsByTagName("shortName")
         if (shortName.length > 0) {
@@ -86,7 +92,7 @@ export default class Service {
                 this.mediumName = mediumName[0].childNodes[0].textContent
             }
         }
-        
+
         // Long Name
         let longName = xml.getElementsByTagName("longName")
         if (longName.length > 0) {
@@ -94,7 +100,7 @@ export default class Service {
                 this.longName = longName[0].childNodes[0].textContent
             }
         }
-        
+
         // Multimedia
         let multimediaz = xml.getElementsByTagName("multimedia")
         for (var i = 0; i < multimediaz.length; i++) {
@@ -107,14 +113,14 @@ export default class Service {
                 m.hasAttribute("url") ? m.getAttribute("url") : undefined,
                 m.hasAttribute("lang") ? m.getAttribute("lang") : undefined,
                 m.hasAttribute("mimeValue") ? m.getAttribute("mimeValue") : undefined,
-                m.hasAttribute("type") ? m.getAttribute("type") : undefined, 
-                width, 
+                m.hasAttribute("type") ? m.getAttribute("type") : undefined,
+                width,
                 height
             )
             this.multimedia.push(multimedia)
         }
-        
-        
+
+
         // Short Description
         let shortDescription = xml.getElementsByTagName("shortDescription")
         if (shortDescription.length > 0) {
@@ -128,7 +134,7 @@ export default class Service {
                 }
             }
         }
-        
+
         // Long Description
         let longDescription = xml.getElementsByTagName("longDescription")
         if (longDescription.length > 0) {
@@ -142,24 +148,24 @@ export default class Service {
                 }
             }
         }
-        
+
         // RadioDNS
         let radioDNS = xml.getElementsByTagName("radiodns")
         if (radioDNS.length > 0) {
             let r = radioDNS[0]
             this.radioDNS = new RadioDNS(
-                r.hasAttribute("fqdn") ? r.getAttribute("fqdn") : undefined, 
+                r.hasAttribute("fqdn") ? r.getAttribute("fqdn") : undefined,
                 r.hasAttribute("serviceIdentifier") ? r.getAttribute("serviceIdentifier") : undefined
             )
         }
-        
+
         // Service Group Member
         let serviceGroupMember = xml.getElementsByTagName("serviceGroupMember")
         if (serviceGroupMember.length > 0) {
             this.serviceGroupMember = serviceGroupMember[0].hasAttribute("id") ? serviceGroupMember[0].getAttribute("id") : null
         }
     }
-    
+
     name() {
         // Return whichever of shortName, mediumName, longName
         if (this.longName !== undefined) {
@@ -170,7 +176,7 @@ export default class Service {
             return this.shortName
         }
     }
-    
+
     description() {
         if (this.longDescription !== undefined) {
             return this.longDescription
@@ -183,7 +189,7 @@ export default class Service {
 /*
 http://www.etsi.org/deliver/etsi_ts/102800_102899/102818/03.01.01_60/ts_102818v030101p.pdf
 
-nameGroup (shortName, mediumName, longName) 
+nameGroup (shortName, mediumName, longName)
 ETSI
 25 ETSI TS 102 818 V3.1.1 (2015-01)
 • mediaDescription
@@ -200,5 +206,5 @@ At least one of each of the following descriptive elements shall be specified fo
 language:
 • shortName
 • mediumName
-At least one genre element shall be 
+At least one genre element shall be
 */
