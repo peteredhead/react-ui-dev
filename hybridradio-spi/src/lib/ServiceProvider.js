@@ -4,8 +4,9 @@ export default class ServiceProvider {
     constructor() {
         this.keywords = []
         this.links = []
-        // media description
+        this.multimedia = []
         this.shortName, this.mediumName, this.longName = undefined
+        this.shortDescription, this.longDescription = undefined
     }
 
     parse(element) {
@@ -16,26 +17,20 @@ export default class ServiceProvider {
             switch (nodeName) {
                 case "shortName":
                     this.shortName = this.parseText(child, 8)
-                    console.log(`** shortName is ${this.shortName}`)
                     break
                 case "mediumName":
                     this.mediumName = this.parseText(child, 16)
-                    console.log(`** mediumName is ${this.mediumName}`)
                     break
                 case "longName":
                     this.longName = this.parseText(child, 128)
-                    console.log(`** longName is ${this.longName}`)
                 case "mediaDescription":
                     this.parseMediaDescription(child)
                     break
                 case "link":
-                    const link = this.parseLink(child)
-                    // Could set this in the function itself
-                    this.links.push(link)
+                    this.parseLink(child)
                     break
             }
         }
-        console.log("%o", this.links)
     }
 
     parseText(element, maxLength) {
@@ -60,7 +55,7 @@ export default class ServiceProvider {
             element.hasAttribute("description") ? element.getAttribute("description") : undefined,
             element.hasAttribute("expiryTime") ? element.getAttribute("expiryTime") : undefined
         )
-        return link
+        if (!link.expired) this.links.push(link)
     }
 
     parseMediaDescription(element) {
@@ -70,16 +65,31 @@ export default class ServiceProvider {
             var nodeName = child.nodeName
             switch (nodeName) {
                 case "shortDescription":
-                    console.log("shortDescription")
+                    this.shortDescription = this.parseText(child, 180)
                     break
                 case "longDescription":
-                    console.log("longDescription")
+                    this.longDescription = this.parseText(child, 1200)
                     break
                 case "multimedia":
-                    console.log("multimedia")
+                    this.parseMultimedia(child)
                     break
             }
-            console.log(`>>> ${nodeName}`)
         }
+    }
+
+    parseMultimedia(element) {
+        let width = parseInt(element.getAttribute("width"), 10)
+        if (isNaN(width)) { width = undefined }
+        let height = parseInt(element.getAttribute("height"), 10)
+        if (isNaN(height)) { height = undefined }
+        let multimedia = new Multimedia(
+            element.hasAttribute("url") ? element.getAttribute("url") : undefined,
+            element.hasAttribute("lang") ? element.getAttribute("lang") : undefined,
+            element.hasAttribute("mimeValue") ? element.getAttribute("mimeValue") : undefined,
+            element.hasAttribute("type") ? element.getAttribute("type") : undefined,
+            width,
+            height
+        )
+        this.multimedia.push(multimedia)
     }
 }

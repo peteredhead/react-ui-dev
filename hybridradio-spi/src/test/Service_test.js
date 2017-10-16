@@ -15,15 +15,14 @@ var parser = new DOMParser()
 const data = parser.parseFromString(serviceXml(), "text/xml");
 
 var service = new Service()
-service.fromXml(data)
-
+service.parse(data.childNodes[0])
 
 describe("Service element parser", () => {
-    
+
     it("exists", () => {
         Service.should.exist
     }),
-    
+
     describe("bearers", () => {
         it("has the correct number of bearers", () => {
             service.bearers.length.should.equal(4)
@@ -39,7 +38,7 @@ describe("Service element parser", () => {
             const bearer = service.bearers[1]
             bearer.offset.should.equal(0)
         })
-        
+
     }),
     describe("genres", () => {
        it("has the correct number of genres", () => {
@@ -48,7 +47,7 @@ describe("Service element parser", () => {
        it("parses the genres correctly", () => {
            const genre = service.genres[1]
            genre.href.should.equal("urn:tva:metadata:cs:ContentCS:2004:3.6.10")
-           
+
        }),
        it("assumes a genre with no type specified is the main genre", () =>{
            const genre = service.genres[0]
@@ -137,12 +136,12 @@ describe("Service element parser", () => {
         it("parses the medium name correctly", () => {
             service.mediumName.should.equal("Test Medium Name")
         })
-        
+
     }),
     describe("short description", () => {
         it("parses the short description correctly", () => {
             service.shortDescription.should.equal("Test Short Description")
         })
-        
+
     })
 })
